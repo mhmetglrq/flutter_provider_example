@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_provider_example/future/login/view/login_view.dart';
+import 'package:flutter_provider_example/product/model/state/product_context.dart';
+import 'package:provider/provider.dart';
 
 import '../../product/padding/page_padding.dart';
 import '../../product/widget/onboard_card.dart';
 import 'onboard_model.dart';
 import 'tab_indicator.dart';
+import 'package:kartal/kartal.dart';
 
 part './module/start_fab_button.dart';
 
@@ -55,7 +59,7 @@ class _OnBoardViewState extends State<OnBoardView>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _appBar(),
+      appBar: _appBar(context),
       body: Padding(
         padding: const PaddingPage.all(),
         child: Column(
@@ -84,10 +88,14 @@ class _OnBoardViewState extends State<OnBoardView>
     );
   }
 
-  AppBar _appBar() {
+  AppBar _appBar(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      title: Text(
+        context.watch<ProductContext>().newUserName,
+        style: const TextStyle(color: Colors.red),
+      ),
       systemOverlayStyle: SystemUiOverlayStyle.dark,
       leading: _isFirstPage
           ? null
@@ -105,7 +113,10 @@ class _OnBoardViewState extends State<OnBoardView>
             return value
                 ? const SizedBox()
                 : TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      context.read<ProductContext>().changeName('veli');
+                      context.navigateToPage(const LoginView());
+                    },
                     child: Text(
                       _skipTile,
                     ),
